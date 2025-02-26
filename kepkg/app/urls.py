@@ -1,0 +1,40 @@
+
+from django.contrib import admin
+from django.urls import path
+from .views import news_list, news_create, news_detail, news_update, news_delete, amandement, amandement_update, amandement_detail, amandement_list, my_amandement_list, resubmission_detail, resubmission_list, my_resubmission_list, resubmission_update, resubmission, decision, reviewer_submission_list, reviewer, reviewer_detail, reviewer_delete, reviewer_update, dashboard, register, profile, submission_create, submission_delete, submission_detail, submission_update, submission_list, my_submission_list, success, profile_update, status_update, review
+
+urlpatterns = [
+    path('', dashboard, name="dashboard"),
+    path('profile/', profile, name='profile'),
+    path('profile/update/', profile_update, name='profile_update'),
+    path('status/<id>/update/', status_update, name='status_update'),
+    path('submission/', submission_list, name='submission_list'),
+    path('my_submission/', my_submission_list, name='my_submission_list'),
+    path('submission/new/', submission_create, name='submission_create'),
+    path('submission/<slug:slug>/', submission_detail, name='submission_detail'),
+    path('submission/<slug:slug>/update/', submission_update, name='submission_update'),
+    path('submission/<slug:slug>/delete/', submission_delete, name='submission_delete'),
+    path('review/<slug:slug>',review,name="review"),
+    path('reviewer/<slug:slug>',reviewer,name="reviewer"),
+    path('reviewer/<id>/', reviewer_detail, name='reviewer_detail'),
+    path('reviewer/<id>/delete/', reviewer_delete, name='reviewer_delete'),
+    path('reviewer/<id>/update/', reviewer_update, name='reviewer_update'),
+    path('reviewer_submission/', reviewer_submission_list, name='reviewer_submission_list'),
+    path('success', success, name="success"),
+    path('resubmission/', resubmission_list, name='resubmission_list'),
+    path('my_resubmission/', my_resubmission_list, name='my_resubmission_list'),
+    path('decision/<slug:slug>',decision,name="decision"),
+    path('resubmission/<id>/',resubmission_detail,name="resubmission_detail"),
+    path('resubmission/<id>/update',resubmission_update,name="resubmission_update"),
+    path('resubmission/<slug:slug>/new',resubmission,name="resubmission"),
+    path('amandement/', amandement_list, name='amandement_list'),
+    path('my_amandement/', my_amandement_list, name='my_amandement_list'),
+    path('amandement/<id>/', amandement_detail, name="amandement_detail"),
+    path('amandement/<id>/update', amandement_update, name="amandement_update"),
+    path('amandement/<slug:slug>/new', amandement, name="amandement"),
+    path('news/', news_list, name='news_list'),
+    path('news/new/', news_create, name='news_create'),
+    path('news/<slug:slug>/', news_detail, name='news_detail'),
+    path('news/<slug:slug>/update/', news_update, name='news_update'),
+    path('news/<slug:slug>/delete/', news_delete, name='news_delete'),
+]

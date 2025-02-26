@@ -1,0 +1,65 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content-row %}
+<div class="container">
+    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Daftar Resubmission Saya</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    </div>
+
+    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Revisi Pengajuan Etik</h6>
+                        </div>
+                        <div class="card-body">
+                             <div class="my-4">
+                            <!-- Topbar Search -->
+                                        <form
+                                            class="d-none d-sm-inline-block form-inline">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control bg-light border-0 small" placeholder="Cari ..."
+                                                    aria-label="Search" aria-describedby="basic-addon2" name="q">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" type="submit">
+                                                        <i class="fas fa-search fa-sm"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                        </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Judul</th>
+                                            <th>Tanggal Pengajuan Revisi</th>
+                                            <th>Sudah direview</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Judul</th>
+                                            <th>Tanggal Pengajuan Revisi</th>
+                                            <th>Sudah direview</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for object in object_list%}
+                                        <tr>
+                                            <td><a href="{% url 'resubmission_detail' object.id %}">{{object.submission.title}}</a></td>
+                                            <td>{{object.created_at}}</td>
+                                             <td class="text-center">{% if object.review %}  <i class="fas fa-check text-gray-500"></i> {% else %} <i class="fas fa-minus text-gray-500"></i>{% endif %}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "dashboard/pagination.html" with page=object_list %}
+                            </div>
+                        </div>
+                    </div>
+</div> 
+
+{% endblock %}

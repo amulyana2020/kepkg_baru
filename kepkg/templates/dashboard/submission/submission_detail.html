@@ -1,0 +1,242 @@
+{%extends 'dashboard/base.html'%}
+
+{% block content-row %}
+<div class="container">
+<div class="card shadow mb-4">
+    <div class="card-header">
+        <strong><h5>{{object.title}}</h5></strong>
+    </div>
+    <div class="card-body">   
+                <table class="table table-hover table-bordered">
+                    <tr>
+                <td>Tanggal Submit</td>
+                <td>{{object.created_at}}</td>
+            </tr>
+                    <tr>
+                <td>Nama Peneliti</td>
+                <td>{{object.user.first_name}} {{object.user.last_name}}</td>
+            </tr>
+            <tr>
+                <td>Judul Penelitian</td>
+                <td>{{object.title}}</td>
+            </tr>
+            <tr>
+                <td>Program Studi</td>
+                <td>{{object.study_program}}</td>
+            </tr>
+                    <tr>
+                <td>Sample / Subject</td>
+                <td>{{object.sample_or_subject}}</td>
+            </tr>
+            <tr>
+                <td>Data Primer atau Sekunder</td>
+                <td>{{object.data}}</td>
+            </tr>
+            <tr>
+                <td>Formulir Pengajuan</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.submission_file.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Informed Consent</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.consent_file.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Lembar Persetujuan</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.agreement_file.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Surat Pengantar dari Institusi</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.institution_letter.url }}">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Surat Penyataan Penelitian Belum Dilaksanakan Sebelum Pengajuan Kelaikan Etik</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.statement_letter.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Kajian Ilmiah oleh Peer Group atau Departemen Terkait</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.peer_group_form.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Biodata Peneliti Tentang Penelitian Yang Telah Dilakukan</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.curriculum_vitae.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+            <tr>
+                <td>Bukti Pembayaran</td>
+                <td><a href="{{ MEDIA_URL }}{{ object.payment.url }}" target="_blank">Lihat / Unduh</a></td>
+            </tr>
+        </table>
+
+        <p class="text-danger">Pengajuan Etik masih dapat diubah atau dihapus selama status pengajuan masih kosong.</p>
+        {% if object.user == request.user and status.status == "" %}
+        <a href="{{object.get_update_url}}" class="btn btn-primary">UBAH PENGAJUAN</a>
+         <a href="{{object.get_delete_url}}" class="btn btn-danger">HAPUS PENGAJUAN</a>
+        {% endif %}
+      </div>
+    </div>
+
+        <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Status</h5>
+        </div>
+        <div class="card-body">
+            <div class="card p-4">
+                    {% if status %}
+                        <li>Status Pengajuan: {{status.status}}</li>
+                         {% if status.exemption_letter %}<li>Surat Pembebasan Telaah Etik :  <a href="{{ MEDIA_URL }}{{ status.exemption_letter.url }}" target="_blank">Lihat / Unduh </a></li>{% endif %}
+                        {% if perms.app.change_status %}
+                        <li>Kategori Telaah : {{status.category}}</li>
+                        {% endif %}
+                {% else %}
+                    <p>Belum ada status untuk pengajuan ini.</p>
+                {% endif %}
+                </div>
+                <div>
+                            <a href="{% url 'status_update' status.id %}" class="btn btn-primary mt-4">UPDATE STATUS</a>
+                        </div>
+            </div>
+    </div>
+
+    {% if perms.app.change_status %}
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Reviewer</h5>
+        </div>
+        <div class="card-body">
+            <div class="card mb-2 p-4">
+                {% if reviewers %}
+                <ol>
+                {% for reviewer in reviewers %}
+                    <li>{{reviewer.reviewer}} &nbsp <a href="{% url 'reviewer_detail' reviewer.pk %}"><i class="fas fa-edit text-gray-500"></i></a></li>
+                {% endfor %}
+                </ol>
+                {% else %}
+                    <p>Belum ada reviewer.</p>
+                {% endif %}
+                </div>
+            <div><a href="{% url 'reviewer' object.slug %}" class="btn btn-primary">ASSIGN REVIEWER</a></div>
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if perms.app.change_status or perms.app.add_review %}
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Hasil Telaah</h5>
+        </div>
+        <div class="card-body">
+            {% if reviews %}
+            {% for review in reviews %}
+            <div class="card p-4">
+                <li>Reviewer: {{review.reviewer}}</li>
+                <li>Keterangan: {{review.description}}</li>
+            <li>Dokumen Review (Dokumen D): <a href="{{ MEDIA_URL }}{{ review.file_review.url }}" target="_blank">Lihat / Unduh</a></li>
+            <li>Keputusan Reviewer: {{review.decision}}</li>
+                <li>Tanggal selesai review {{review.review_date}}</li>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>Belum ada review untuk pengajuan ini.</p>
+        {% endif %}
+            {% if request.user == review.submission.reviewer%}
+            <div class="mt-2">
+                <a href="{% url 'review' object.slug %}" class="btn btn-primary">BUAT REVIEW</a>
+            </div>
+            {% endif %}
+            </div>
+    </div>
+    {% endif %}
+
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Laporan Telaah</h5>
+        </div>
+        <div class="card-body">
+            {% if decisions %}
+            {% for decision in decisions %}
+            <div class="p-4 card mb-2">
+                <li>Keputusan Akhir: {{decision.decision}}</li>
+            <li>File Laporan Telaah (Dokumen E): <a href="{{ MEDIA_URL }}{{ decision.file_decision.url }}" target="_blank">Lihat / Unduh</a></li>
+                <li>Tanggal Laporan Telaah {{decision.created_at}}</li>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p class="p-4">Belum ada laporan telaah untuk pengajuan ini.</p>
+            {% endif %}
+            {% if perms.app.change_status %}
+            <div> <a href="{% url 'decision' object.slug %}" class="btn btn-primary">UNGGAH LAPORAN TELAAH</a></div>
+            {% endif %}
+        </div>
+    </div>
+
+
+        <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Resubmission</h5>
+        </div>
+        <div class="card-body">
+            {% if revisions %}
+            {% for revision in revisions %}
+            <div class="p-4 card mb-2">
+                {{revision}}
+            <li>File Revisi (Dokumen F): <a href="{{ MEDIA_URL }}{{ revision.resubmission_document.url }}" target="_blank">Lihat / Unduh</a></li>
+                {% if revision.review %}
+                    <li>Telaah dari Reviewer: {{ revision.review }}</li>
+                {% endif %}
+                <li>Disubmit tanggal {{revision.created_at}}</li>
+            </div>
+            {% if request.user == revision.submission.reviewer %}
+            <div class="mt-2">
+                <a href="{% url 'resubmission_update' revision.pk %}" class="btn btn-primary">REVIEW REVISI</a>
+            </div>
+            {% endif %}
+           {% endfor %}
+        {% else %}
+            <p>Belum ada revisi untuk pengajuan ini.</p>
+            <div class="mt-2">
+                {% if object.user == request.user %}
+                <a href="{% url 'resubmission' object.slug %}" class="btn btn-primary">AJUKAN RESUBMISSION</a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+     <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Amandemen</h5>
+        </div>
+        <div class="card-body">
+            {% if amandements %}
+            {% for amandement in amandements %}
+            <div class="p-4 card mb-2">
+                {{amandement}}
+            <li>File Amandemen (Dokumen G): <a href="{{ MEDIA_URL }}{{ amandement.amandement_document.url }}" target="_blank">Lihat / Unduh</a></li>
+                {% if amandement.review %}
+                    <li>Telaah dari Reviewer: {{ amandement.review }}</li>
+                {% endif %}
+                <li>Disubmit tanggal {{amandement.created_at}}</li>
+            </div>
+            {% if request.user == amandement.submission.reviewer%}
+            <div class="mt-2">
+                <a href="{% url 'amandement_update' amandement.pk %}" class="btn btn-primary">REVIEW AMANDEMEN</a>
+            </div>
+            {% endif %}
+           {% endfor %}
+        {% else %}
+            <p>Belum ada revisi untuk pengajuan ini.</p>
+            <div class="mt-2">
+                {% if object.user == request.user %}
+                <a href="{% url 'amandement' object.slug %}" class="btn btn-primary">AJUKAN AMANDEMEN</a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

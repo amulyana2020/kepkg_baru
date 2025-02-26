@@ -1,0 +1,49 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content-row %}
+<div class="container">
+<div class="card shadow">
+    <div class="card-header">
+        ALL SUBMISSION
+    </div>
+    <div class="card-body">
+    <div class="my-4">
+        <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Cari ..."
+                                aria-label="Search" aria-describedby="basic-addon2" name="q">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+    </div>
+    <table class="table table-hover table-bordered">
+        <tr>
+            <td>Nama Peneliti</td>
+          <td>Judul Penelitian</td>
+            <td>Tanggal Submit</td>
+          <td>Status</td>
+            <td>Tanggal Diupdate</td>
+        </tr>
+        {% for object in object_list%}
+        <tr>
+            <td><a href="{{object.get_absolute_url}}">{{object.user.first_name}} {{object.user.last_name}}</a></td>
+          <td><a href="{{object.get_absolute_url}}">{{object.title}}</a></td>
+            <td>{{object.created_at}}</td>
+          <td>{{object.status.status}}</td>
+            <td>{{object.status.updated_at}}</td>
+        </tr>
+        {% endfor %} 
+    </table>
+        {% include "dashboard/pagination.html" with page=object_list %}
+  </div>
+</div>
+</div> 
+
+{% endblock %}

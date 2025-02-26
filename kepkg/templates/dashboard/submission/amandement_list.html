@@ -1,0 +1,47 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content-row %}
+<div class="container">
+<div class="card shadow">
+    <div class="card-header">
+        DAFTAR AMANDEMEN
+    </div>
+    <div class="card-body">
+    <div class="my-4">
+        <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Cari ..."
+                                aria-label="Search" aria-describedby="basic-addon2" name="q">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+    </div>
+    <table class="table table-hover table-bordered">
+        <tr>
+            <td>Nama Peneliti</td>
+          <td>Judul Penelitian</td>
+            <td>Tanggal Submit Amandemen</td>
+            <td>Sudah direview</td>
+        </tr>
+        {% for object in object_list%}
+        <tr>
+            <td><a href="{{object.get_absolute_url}}">{{object.submission.user.first_name}} {{object.submission.user.last_name}}</a></td>
+          <td><a href="{{object.get_absolute_url}}">{{object.submission.title}}</a></td>
+            <td class="text-center">{{object.created_at}}</td>
+            <td class="text-center">{% if object.review %}  <i class="fas fa-check text-gray-500"></i> {% else %} <i class="fas fa-minus text-gray-500"></i>{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+        {% include "dashboard/pagination.html" with page=object_list %}
+  </div>
+</div>
+</div>
+
+{% endblock %}

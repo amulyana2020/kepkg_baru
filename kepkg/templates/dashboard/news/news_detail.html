@@ -1,0 +1,34 @@
+{%extends 'dashboard/base.html'%}
+
+{% block content-row %}
+<div class="container">
+<div class="card shadow mb-4">
+    <div class="card-header">
+        <strong><h5>{{object.title}}</h5></strong>
+    </div>
+    <div class="card-body">   
+                <table class="table table-hover table-bordered">
+                    <tr>
+                <td>Tanggal</td>
+                <td>{{object.created_at}}</td>
+            </tr>
+                    <tr>
+                <td>Judul</td>
+                <td>{{object.title}}</td>
+            </tr>
+            <tr>
+                <td>Berita</td>
+                <td>{{object.content|safe}}</td>
+            </tr>
+        </table>
+        {% if request.user.is_staff %}
+        <a href="{{object.get_update_url}}" class="btn btn-primary">UBAH BERITA</a>
+         <a href="{{object.get_delete_url}}" class="btn btn-danger">HAPUS BERITA</a>
+        {% endif %}
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

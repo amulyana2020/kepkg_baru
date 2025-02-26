@@ -1,0 +1,25 @@
+{% extends "registration/base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}  
+<div class="container">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <div class="row">
+                  <div class="col-lg-6 mx-auto">
+                      <div class="card-wrapper">
+                        <div class="card-body ">
+                            <h3>Selamat Datang {{ new_user.first_name }} {{ new_user.last_name }}!</h3>
+                              <p>Akun anda sudah dibuat.</p>
+                              <p>Silahkan login untuk melakukan pengajuan etik.</p>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+{% endblock %}

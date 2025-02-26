@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h5>Berita</h5>
+    {% for new in news %}
+        <p>
+            <h5>{{new.title}}</h5>
+        </p>
+    {% endfor %}
+{% endblock %}

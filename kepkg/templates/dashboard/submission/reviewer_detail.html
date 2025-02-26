@@ -1,0 +1,23 @@
+{%extends 'dashboard/base.html'%}
+
+{% block content-row %}
+<div class="container">
+<div class="card shadow mb-4">
+    <div class="card-header">
+        <strong><h5>Reviewer</h5></strong>
+        <p>{{object.submission}}</p>
+    </div>
+    <div class="card-body">   
+
+        <p>Nama Reviewer : {{object.reviewer}}</p>
+        {% if perms.app.change_reviewer %}
+        <a href="{{object.get_update_url}}" class="btn btn-primary">UBAH REVIEWER</a>
+         <a href="{{object.get_delete_url}}" class="btn btn-danger">HAPUS REVIEWER</a>
+        {% endif %}
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
