@@ -36,22 +36,13 @@
                                         <tr>
                                             <th>Judul</th>
                                             <th>Tanggal Pengajuan Amandemen</th>
-                                            <th>Sudah direview</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Judul</th>
-                                            <th>Tanggal Pengajuan Amandemen</th>
-                                            <th>Sudah direview</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         {% for object in object_list%}
                                         <tr>
                                             <td><a href="{% url 'amandement_detail' object.id %}">{{object.submission.title}}</a></td>
                                             <td>{{object.created_at}}</td>
-                                             <td class="text-center">{% if object.review %}  <i class="fas fa-check text-gray-500"></i> {% else %} <i class="fas fa-minus text-gray-500"></i>{% endif %}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

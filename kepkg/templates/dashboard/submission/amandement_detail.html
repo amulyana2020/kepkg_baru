@@ -11,7 +11,6 @@
         <div class="card p-4 mb-2">
             <p>Pengajuan: {{object.submission}}</p>
             <p>Dokumen Amandemen: <a href="{{ MEDIA_URL }}{{ object.amandement_document.url }}" target="_blank">Lihat / Unduh</a></p>
-            <p>Review dari Reviewer: {% if object.review %}<p class="text-info"> {{object.review}}</p> {% else %} <p class="text-danger">Belum ada review dari reviewer.</p> {% endif %}</p>
         </div>
 
       </div>

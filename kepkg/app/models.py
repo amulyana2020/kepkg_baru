@@ -238,6 +238,24 @@ class Resubmission(models.Model):
         return reverse('resubmission_detail', args=[self.pk])
 
 
+
+class ReviewResubmission(models.Model):
+    description = RichTextField(verbose_name="Hasil Review Resubmission", null=True, blank=True, default='')
+    file_review = models.FileField(upload_to='file/file_review/', null=True, blank=True,
+                                        verbose_name="Upload hasil review (Dokumen D) ")
+    decision = models.CharField(max_length=255, verbose_name="Keputusan", choices=DECISION_CHOICES)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='reviews_resubmission',
+                                related_query_name='review_resubmission', null=True, blank=True)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews_resubmission', related_query_name='review_resubmission')
+    review_date = models.DateField(verbose_name="Tanggal Selesai Review")
+    created = models.DateField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return '%s %s  -- %s --%s' % (self.reviewer.first_name, self.reviewer.last_name, self.reviewer.email, self.decision)
+
+
+
 class Amandement(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='amandement',
                                    related_query_name='amandement')

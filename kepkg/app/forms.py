@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile, Submission, Status, Review, Reviewer, Decision, Resubmission, Amandement, News
+from .models import ReviewResubmission, Profile, Submission, Status, Review, Reviewer, Decision, Resubmission, Amandement, News
 from bootstrap_datepicker_plus.widgets  import DatePickerInput
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 from ckeditor.widgets import CKEditorWidget
@@ -61,6 +61,16 @@ class ReviewForm(forms.ModelForm):
             'review_date': DatePickerInput(),
         }
 
+
+class ReviewResubmissionForm(forms.ModelForm):
+
+    class Meta:
+        model = ReviewResubmission
+        fields = ('description', 'file_review', 'decision', 'review_date')
+
+        widgets = {
+            'review_date': DatePickerInput(),
+        }
 
 class DecisionForm(forms.ModelForm):
 

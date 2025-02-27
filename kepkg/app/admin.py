@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import Profile, Status, Reviewer, Review, Decision, Resubmission, News
+from .models import Profile, Status, Reviewer, Review, Decision, Resubmission, News, ReviewResubmission
 
 admin.site.register(Reviewer)
 admin.site.register(Decision)
 admin.site.register(Resubmission)
+admin.site.register(ReviewResubmission)
 
 
 # Register your models here.

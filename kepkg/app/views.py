@@ -6,8 +6,8 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Profile, Submission, Status, Review, Reviewer, Decision, Resubmission, Amandement, News
-from .forms import NewsForm, AmandementForm, AmandementUpdateForm, ResubmissionUpdateForm, ResubmissionForm, DecisionForm,ReviewerForm, UserRegistrationForm, UserForm, SubmissionForm, ProfileForm, StatusForm, ReviewForm
+from .models import ReviewResubmission, Profile, Submission, Status, Review, Reviewer, Decision, Resubmission, Amandement, News
+from .forms import ReviewResubmissionForm, NewsForm, AmandementForm, AmandementUpdateForm, ResubmissionUpdateForm, ResubmissionForm, DecisionForm,ReviewerForm, UserRegistrationForm, UserForm, SubmissionForm, ProfileForm, StatusForm, ReviewForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from bootstrap_datepicker_plus.widgets import DatePickerInput
@@ -111,6 +111,7 @@ def submission_detail(request, slug):
     reviews = Review.objects.filter(submission=submission)
     decisions = Decision.objects.filter(submission=submission)
     revisions = Resubmission.objects.filter(submission=submission)
+    review_resubmissions = ReviewResubmission.objects.filter(submission=submission)
     amandements = Amandement.objects.filter(submission=submission)
 
     context = {
@@ -120,7 +121,7 @@ def submission_detail(request, slug):
         'reviewers': reviewers,
         'decisions': decisions,
         'revisions': revisions,
-
+        'review_resubmissions': review_resubmissions,
         'amandements': amandements
     }
 
@@ -389,8 +390,6 @@ def resubmission(request, slug):
         resubmission_form.save()
         messages.success(request, 'Resubmission berhasil disimpan')
 
-        return redirect(submission.get_absolute_url())
-
     form = ResubmissionForm()
     context = {
         "form": form,
@@ -475,6 +474,25 @@ def resubmission_detail(request, id):
 
     return render(request, 'dashboard/submission/resubmission_detail.html', context)
 
+
+@login_required
+def review_resubmission(request, id):
+    submission = Submission.objects.get(id=id)
+    form = ReviewResubmissionForm(request.POST, request.FILES)
+    if form.is_valid():
+        review_form = form.save(commit=False)
+        review_form.reviewer = request.user
+        review_form.submission = submission
+        review_form.save()
+        messages.success(request, 'Review Resubmission sudah disimpan.')
+        return redirect(submission.get_absolute_url())
+
+    form = ReviewResubmissionForm()
+    context = {
+        "form":form,
+        'submission': resubmission
+    }
+    return render(request, 'dashboard/submission/review_resubmission.html',context)
 
 
 @login_required

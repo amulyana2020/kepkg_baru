@@ -128,7 +128,7 @@
         <div class="card-body">
             {% if reviews %}
             {% for review in reviews %}
-            <div class="card p-4">
+            <div class="card p-4 mb-2">
                 <li>Reviewer: {{review.reviewer}}</li>
                 <li>Keterangan: {{review.description|safe}}</li>
                 {% if review.file_review %}
@@ -194,15 +194,43 @@
            {% endfor %}
         {% else %}
             <p>Belum ada revisi untuk pengajuan ini.</p>
-            <div class="mt-2">
+
+            {% endif %}
+        <div class="mt-2">
                 {% if object.user == request.user %}
                 <a href="{% url 'resubmission' object.slug %}" class="btn btn-primary">AJUKAN RESUBMISSION</a>
                 {% endif %}
             </div>
-            {% endif %}
-
         </div>
     </div>
+
+    {% if perms.app.change_status or perms.app.add_review %}
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Hasil Telaah Resubmission</h5>
+        </div>
+        <div class="card-body">
+            {% if review_resubmissions %}
+            {% for review_resubmission in review_resubmissions %}
+            <div class="card p-4 mb-2">
+                <li>Reviewer: {{review_resubmission.reviewer}}</li>
+                <li>Keterangan: {{review_resubmission.description|safe}}</li>
+                {% if review_resubmission.file_review %}
+                <li>Dokumen Review (Dokumen D): <a href="{{ MEDIA_URL }}{{ review_resubmission.file_review.url }}" target="_blank">Lihat / Unduh</a></li>
+                {% endif %}
+                <li>Keputusan Reviewer: {{review_resubmission.decision}}</li>
+                <li>Tanggal selesai review {{review_resubmission.review_date}}</li>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>Belum ada review untuk resubmission ini.</p>
+        {% endif %}
+            <div class="mt-2">
+                <a href="{% url 'review_resubmission' object.id %}" class="btn btn-primary">BUAT REVIEW RESUBMISSION</a>
+            </div>
+            </div>
+    </div>
+    {% endif %}
 
      <div class="card shadow mb-4">
         <div class="card-header">
@@ -227,13 +255,12 @@
            {% endfor %}
         {% else %}
             <p>Belum ada revisi untuk pengajuan ini.</p>
+            {% endif %}
             <div class="mt-2">
                 {% if object.user == request.user %}
                 <a href="{% url 'amandement' object.slug %}" class="btn btn-primary">AJUKAN AMANDEMEN</a>
                 {% endif %}
             </div>
-            {% endif %}
-
         </div>
     </div>
 

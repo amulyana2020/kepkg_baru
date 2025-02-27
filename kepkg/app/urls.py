@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-from .views import news_list, news_create, news_detail, news_update, news_delete, amandement, amandement_update, amandement_detail, amandement_list, my_amandement_list, resubmission_detail, resubmission_list, my_resubmission_list, resubmission_update, resubmission, decision, reviewer_submission_list, reviewer, reviewer_detail, reviewer_delete, reviewer_update, dashboard, register, profile, submission_create, submission_delete, submission_detail, submission_update, submission_list, my_submission_list, success, profile_update, status_update, review
+from .views import review_resubmission, news_list, news_create, news_detail, news_update, news_delete, amandement, amandement_update, amandement_detail, amandement_list, my_amandement_list, resubmission_detail, resubmission_list, my_resubmission_list, resubmission_update, resubmission, decision, reviewer_submission_list, reviewer, reviewer_detail, reviewer_delete, reviewer_update, dashboard, register, profile, submission_create, submission_delete, submission_detail, submission_update, submission_list, my_submission_list, success, profile_update, status_update, review
 
 urlpatterns = [
     path('', dashboard, name="dashboard"),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('decision/<slug:slug>',decision,name="decision"),
     path('resubmission/<id>/',resubmission_detail,name="resubmission_detail"),
     path('resubmission/<id>/update',resubmission_update,name="resubmission_update"),
+    path('review_resubmission/<id>',review_resubmission,name="review_resubmission"),
     path('resubmission/<slug:slug>/new',resubmission,name="resubmission"),
     path('amandement/', amandement_list, name='amandement_list'),
     path('my_amandement/', my_amandement_list, name='my_amandement_list'),
