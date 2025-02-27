@@ -173,7 +173,7 @@ class Status(models.Model):
 
 
 class Review(models.Model):
-    description = models.TextField(verbose_name="Deskripsi")
+    description = RichTextField(verbose_name="Hasil Review", null=True, blank=True, default='')
     file_review = models.FileField(upload_to='file/file_review/', null=True, blank=True,
                                         verbose_name="Upload hasil review (Dokumen D) ")
     decision = models.CharField(max_length=255, verbose_name="Keputusan", choices=DECISION_CHOICES)

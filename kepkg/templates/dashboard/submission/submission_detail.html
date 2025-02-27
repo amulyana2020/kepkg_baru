@@ -130,20 +130,20 @@
             {% for review in reviews %}
             <div class="card p-4">
                 <li>Reviewer: {{review.reviewer}}</li>
-                <li>Keterangan: {{review.description}}</li>
-            <li>Dokumen Review (Dokumen D): <a href="{{ MEDIA_URL }}{{ review.file_review.url }}" target="_blank">Lihat / Unduh</a></li>
-            <li>Keputusan Reviewer: {{review.decision}}</li>
+                <li>Keterangan: {{review.description|safe}}</li>
+                {% if review.file_review %}
+                <li>Dokumen Review (Dokumen D): <a href="{{ MEDIA_URL }}{{ review.file_review.url }}" target="_blank">Lihat / Unduh</a></li>
+                {% endif %}
+                <li>Keputusan Reviewer: {{review.decision}}</li>
                 <li>Tanggal selesai review {{review.review_date}}</li>
             </div>
         {% endfor %}
         {% else %}
             <p>Belum ada review untuk pengajuan ini.</p>
         {% endif %}
-            {% if request.user == review.submission.reviewer%}
             <div class="mt-2">
                 <a href="{% url 'review' object.slug %}" class="btn btn-primary">BUAT REVIEW</a>
             </div>
-            {% endif %}
             </div>
     </div>
     {% endif %}

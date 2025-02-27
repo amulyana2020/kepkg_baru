@@ -161,7 +161,7 @@
                 </div>
             </li>
 
-            {% if request.user.is_staff and perms.app.change_review %}
+            {% if perms.app.change_review %}
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
                 My Review
