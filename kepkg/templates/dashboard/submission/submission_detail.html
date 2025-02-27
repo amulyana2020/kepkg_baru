@@ -80,19 +80,20 @@
         </div>
         <div class="card-body">
             <div class="card p-4">
-                    {% if status %}
-                        <li>Status Pengajuan: {{status.status}}</li>
+                {% if status %}
+                    <li>Status Pengajuan: {{status.status}}</li>
                          {% if status.exemption_letter %}<li>Surat Pembebasan Telaah Etik :  <a href="{{ MEDIA_URL }}{{ status.exemption_letter.url }}" target="_blank">Lihat / Unduh </a></li>{% endif %}
-                        {% if perms.app.change_status %}
+                        {% if perms.app.change_reviewer %}
                         <li>Kategori Telaah : {{status.category}}</li>
                         {% endif %}
-                {% else %}
-                    <p>Belum ada status untuk pengajuan ini.</p>
                 {% endif %}
                 </div>
+
+               {% if perms.app.change_status %}
                 <div>
                             <a href="{% url 'status_update' status.id %}" class="btn btn-primary mt-4">UPDATE STATUS</a>
                         </div>
+               {% endif %}
             </div>
     </div>
 
